@@ -8,8 +8,8 @@ from cartola_robot_random import *
 
 random.seed()
 
-cnx = mysql.connector.connect(user="tpacheco", database="cartola") #cria conexao com a base
-#cnx = mysql.connector.connect(user="inf2290", host="mysql.mosconi.eti.br", database="cartola", password="^inf2290$") #cria conexao com a base
+#cnx = mysql.connector.connect(user="tpacheco", database="cartola") #cria conexao com a base
+cnx = mysql.connector.connect(user="inf2290", host="mysql.mosconi.eti.br", database="cartola", password="^inf2290$") #cria conexao com a base
 
 current_session = 2015
 
