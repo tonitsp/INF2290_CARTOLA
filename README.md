@@ -23,5 +23,5 @@ Modulos Python extra:
     Dados de campeonatos passados.
   
 #Notas:
-    Toni (15/06): Tentei criar a primeira versão com alguma coisa que a gente possa ver/trabalhar/contribuir. Não sou especialita
+    Toni (15/04): Tentei criar a primeira versão com alguma coisa que a gente possa ver/trabalhar/contribuir. Não sou especialita
                 em Python então o que voces perceberem que pode ser melhorado fiquem a vontade para alterar e comitar.
