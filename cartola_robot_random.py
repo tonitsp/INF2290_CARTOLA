@@ -55,7 +55,10 @@ class CartolaRobotRandom(CartolaRobot):
             #-------------------------------#
             
             # jogador deve estar confirmado ou provavel e ter caixa para compra-lo. 
-            allowed_status = players_info[testing].status == PlayerStatus.confirmed or players_info[testing].status == PlayerStatus.probably 
+            allowed_status = players_info[testing].status == PlayerStatus.confirmed
+            allowed_status = allowed_status or players_info[testing].status == PlayerStatus.probably
+            allowed_status = allowed_status or players_info[testing].status == PlayerStatus.unsure
+            
             if  not allowed_status or not self.can_buy(players_info[testing]):
                 continue
             #----------------------------------------------------------------------#

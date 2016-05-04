@@ -5,6 +5,7 @@ from cartola_tipos import *
 from cartola_dados import *
 from cartola_robot_base import *
 from cartola_robot_random import *
+from cartola_robot_greedy import *
 
 random.seed()
 
@@ -22,8 +23,9 @@ robots_cartola = []
 ranking_cartola = Ranking();
 
 #-----adicionar bots----#
-initial_budget = 130.0  #onde buscar isso?
+initial_budget = 100.0  #onde buscar isso?
 robots_cartola.append( CartolaRobotRandom(initial_budget) )
+robots_cartola.append( CartolaRobotGreedy(initial_budget) )
 #-----------------------#
 
 num_turns = load_num_of_turns(cnx) #carrega quantidade de rodadas
@@ -41,3 +43,4 @@ for current_turn in range(1,num_turns+1):
     ranking_cartola.show(current_turn)
 
 cnx.close()
+

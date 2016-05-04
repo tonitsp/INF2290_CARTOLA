@@ -1,14 +1,16 @@
 from cartola_tipos import *
 
+import random
+
 def load_all_players(cnx, session):
     cursor = cnx.cursor()
     query = ("select atleta_id, nome_txt, apelido_txt, preco_editorial_num from atleta_%d" %session)
     cursor.execute(query)
 
-    players = []
+    players = {}
     
     for row in cursor:
-       players.append( Player( int(row[0]), row[1], row[2], float(row[3]) ) )
+       players[int(row[0])] =  Player( int(row[0]), row[1], row[2], float(row[3]) )
     
     return players
        
@@ -43,29 +45,57 @@ def load_num_of_turns(cnx):
     return count;
 
 
+
 def load_turn_info( cnx, current_turn, current_session ):
     ret_data = []
     
     cursor = cnx.cursor()
-    
-    query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn,current_session) )
-    cursor.execute(query)
-    
+
     pre = {}
     pos = {}
+
     
-    for row in cursor:
-        atleta_id = row[0]
-        posicao_id = PlayerRole(row[1])
-        status_id =  PlayerStatus(row[2])
-        preco_num = float(row[3])
-        media_num = float(row[4])
-        jogos_num = int(row[5])
-        pontos_num = float(row[6])
+    if current_turn == 1:
         
-        pre[atleta_id]= PreInfo( atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num )
-        pos[atleta_id]= PosInfo( atleta_id, pontos_num)
-       
+        allplayers = load_all_players(cnx, current_session)
+        query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn,current_session) )
+        cursor.execute(query)
+        
+        for row in cursor:
+            atleta_id = row[0]
+            posicao_id = PlayerRole(row[1])
+            status_id =  PlayerStatus.unsure
+            preco_num = allplayers[atleta_id].price# float(row[3])
+            media_num = preco_num * (0.9 + random.random()*2) #float(row[4])
+            jogos_num = 0 #int(row[5])
+            pontos_num = float(row[6])
+            
+            pre[atleta_id]= PreInfo( atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num,  media_num/preco_num)
+            pos[atleta_id]= PosInfo( atleta_id, pontos_num)
+
+        
+    else:
+        query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn-1,current_session) )
+        cursor.execute(query)
+        
+        for row in cursor:
+            atleta_id = row[0]
+            posicao_id = PlayerRole(row[1])
+            status_id =  PlayerStatus(row[2])
+            preco_num = float(row[3])
+            media_num = float(row[4])
+            jogos_num = int(row[5])
+            pre[atleta_id]= PreInfo( atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num,  media_num/preco_num)
+        
+        query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn,current_session) )
+        cursor.execute(query)
+        
+        for row in cursor:
+            atleta_id = row[0]
+            pontos_num = float(row[6])
+            pos[atleta_id]= PosInfo( atleta_id, pontos_num)
+           
+    cursor.close()
     return [pre,pos]
 
 

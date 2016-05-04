@@ -5,7 +5,7 @@ from operator import attrgetter
 TaticalScheme = namedtuple("TaticalScheme", ['id', 'defense', 'middle','attack'])
 Player = namedtuple( "Player", ['id', 'name', 'alias','price'] )
 Score = namedtuple("Score", [ 'team_id', 'name', 'fc', 'acc_score' ])
-PreInfo = namedtuple("PreInfo", [ 'atleta_id', 'role', 'status', 'price', 'avg_score', 'total_games'  ])
+PreInfo = namedtuple("PreInfo", [ 'atleta_id', 'role', 'status', 'price', 'avg_score', 'total_games', 'avg_price_ratio'  ])
 PosInfo = namedtuple("PosInfo", [ 'atleta_id', 'score' ])
 
 class PlayerStatus(Enum):
