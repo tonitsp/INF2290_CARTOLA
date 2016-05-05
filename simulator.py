@@ -1,6 +1,5 @@
 import datetime
 import mysql.connector
-
 from cartola_tipos import *
 from cartola_dados import *
 from cartola_robot_base import *
