@@ -11,7 +11,7 @@ class CartolaRobot( object ):
     validteam = False
     lastpts = 0.0
     team = None
-    
+    acc = 0
     def __init__(self, budget):
         CartolaRobot.s_team_id += 1
         self.budget = budget
@@ -19,6 +19,7 @@ class CartolaRobot( object ):
 
     def bot_id(self):
         return self.team_id;
+
         
     def build_team(self, players_info):
         self.sell(players_info)
@@ -31,7 +32,9 @@ class CartolaRobot( object ):
         return player_info.price <= self.budget
     
     def buy(self, player_info): #talvez ja adicionar a posicao...
-        assert(self.can_buy(player_info))
+        #assert(self.can_buy(player_info))
+        if (not self.can_buy(player_info)):
+            print "budget negativo! " + str(self.budget-player_info.price)
         self.budget -= player_info.price
         return player_info.atleta_id
     
@@ -54,8 +57,11 @@ class CartolaRobot( object ):
         
         for atleta_id in members:
             if players_results.has_key(atleta_id):
+                #print str(atleta_id) + " Score:" +  str(players_results[atleta_id].score)
                 self.lastpts += players_results[atleta_id].score
- 
+                
+        self.acc += self.lastpts
+        print "Score: " + str(self.lastpts) + " Acc:" + str(self.acc)
         return self.lastpts
     
     
@@ -74,7 +80,7 @@ class CartolaRobot( object ):
     
     def compute_team(self, players_info):
         return True
-
+        
     def selected_scheme(self):
         return []
     

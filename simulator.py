@@ -5,11 +5,12 @@ from cartola_dados import *
 from cartola_robot_base import *
 from cartola_robot_random import *
 from cartola_robot_greedy import *
+from cartola_robot_predict import *
 
 random.seed()
 
-#cnx = mysql.connector.connect(user="tpacheco", database="cartola") #cria conexao com a base
-cnx = mysql.connector.connect(user="inf2290", host="mysql.mosconi.eti.br", database="cartola", password="^inf2290$") #cria conexao com a base
+cnx = mysql.connector.connect(user="tpacheco", database="cartola") #cria conexao com a base
+#cnx = mysql.connector.connect(user="inf2290", host="mysql.mosconi.eti.br", database="cartola", password="^inf2290$") #cria conexao com a base
 
 current_session = 2015
 
@@ -23,12 +24,14 @@ ranking_cartola = Ranking();
 
 #-----adicionar bots----#
 initial_budget = 100.0  #onde buscar isso?
-robots_cartola.append( CartolaRobotRandom(initial_budget) )
-robots_cartola.append( CartolaRobotGreedy(initial_budget) )
+#robots_cartola.append( CartolaRobotRandom(initial_budget) )
+#robots_cartola.append( CartolaRobotGreedy(initial_budget) )
+robots_cartola.append( CartolaRobotPredict(initial_budget) )
 #-----------------------#
 
 num_turns = load_num_of_turns(cnx) #carrega quantidade de rodadas
 
+i=0
 for current_turn in range(1,num_turns+1):
     
     turn_info = load_turn_info( cnx, current_turn, current_session ) # [ info pre-jogo, pos-jogo ]
@@ -39,7 +42,10 @@ for current_turn in range(1,num_turns+1):
     
     last_result = load_turn_scores( cnx, current_turn, current_session );
     ranking_cartola.update( last_result, robots_cartola )
-    ranking_cartola.show(current_turn)
 
+    #uncomment to show the ranking    
+    #ranking_cartola.show(current_turn)
+    
+    i += 1
 cnx.close()
 

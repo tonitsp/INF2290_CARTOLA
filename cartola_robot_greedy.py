@@ -32,21 +32,17 @@ class CartolaRobotGreedy(CartolaRobot):
         allowed_players = []
         for player in players_info:
             
-            allowed_status = player.status == PlayerStatus.probably
+            allowed_status = player.status == PlayerStatus.probably or player.status == PlayerStatus.confirmed
             
-            if self.turn == 1:
-                allowed_status = allowed_status or player.status == PlayerStatus.unsure
-             
-            if  not allowed_status:
-                continue
-            allowed_players.append(player)
+            if self.turn == 1 or allowed_status:
+                allowed_players.append(player)
             
         
-        current_best_val = -1
+        current_best_val = -100000
         current_best_team = None
         current_best_schema = None
         
-        print(self.budget)
+        #print(self.budget)
         
         for schema in CartolaRobot.tactical_schemes:    
             value_team = self.greedly_team( schema, self.budget, allowed_players )
@@ -78,10 +74,10 @@ class CartolaRobotGreedy(CartolaRobot):
             elif player.role == PlayerRole.coach:
                 self.coach.append( self.buy(player) )
     
-        print( current_best_schema )
-        print(current_best_team)
-        print(len(current_best_team))
-        print(self.budget)
+        #print( current_best_schema )
+        #print(current_best_team)
+        #print(len(current_best_team))
+        #print(self.budget)
         
         self.turn = self.turn + 1
                  

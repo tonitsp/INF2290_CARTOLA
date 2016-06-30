@@ -54,6 +54,23 @@ def load_turn_info( cnx, current_turn, current_session ):
     pre = {}
     pos = {}
 
+#cristal ball
+#    query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn,current_session) )
+#    cursor.execute(query)
+#    
+#    for row in cursor:
+#        atleta_id = row[0]
+#        posicao_id = PlayerRole(row[1])
+#        status_id =  PlayerStatus.unsure
+#        preco_num = allplayers[atleta_id].price# float(row[3])
+#        media_num = preco_num * (0.9 + random.random()*2) #float(row[4])
+#        jogos_num = 0 #int(row[5])
+#        pontos_num = float(row[6])
+#        
+#        pre[atleta_id]= PreInfo( atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num,  media_num/preco_num)
+#        pos[atleta_id]= PosInfo( atleta_id, pontos_num)
+    
+    
     
     if current_turn == 1:
         
@@ -72,8 +89,6 @@ def load_turn_info( cnx, current_turn, current_session ):
             
             pre[atleta_id]= PreInfo( atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num,  media_num/preco_num)
             pos[atleta_id]= PosInfo( atleta_id, pontos_num)
-
-        
     else:
         query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn-1,current_session) )
         cursor.execute(query)
@@ -90,8 +105,10 @@ def load_turn_info( cnx, current_turn, current_session ):
         query = ("select atleta_id, posicao_id, status_id, preco_num, media_num, jogos_num, pontos_num from atleta_rodada_%d where rodada_id=%d and atleta_id in (select atleta_id from atleta_%d)" % (current_session, current_turn,current_session) )
         cursor.execute(query)
         
-        for row in cursor:
+        for row in cursor:            
             atleta_id = row[0]
+            if not pre.has_key(atleta_id) or (pre[atleta_id].total_games == int(row[5])): #nao jogou.
+                continue            
             pontos_num = float(row[6])
             pos[atleta_id]= PosInfo( atleta_id, pontos_num)
            
